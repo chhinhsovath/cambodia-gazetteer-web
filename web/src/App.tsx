@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { Code2, Download } from "lucide-react";
 import { useGazetteer } from "./lib/data";
 import { CascadingView } from "./components/CascadingView";
 import { BrowseView } from "./components/BrowseView";
@@ -71,20 +72,44 @@ function Header({
           </div>
         </a>
 
-        <nav className="flex items-center gap-1 p-1 bg-parchment-deep/70 border border-stone/30 rounded-sm">
-          <NavTab
-            active={view === "cascade"}
-            onClick={() => setView("cascade")}
-            label="Locate"
-            kh="ស្វែងរក"
-          />
-          <NavTab
-            active={view === "browse"}
-            onClick={() => setView("browse")}
-            label="Browse"
-            kh="មើលទាំងអស់"
-          />
-        </nav>
+        <div className="flex items-center gap-3 md:gap-5">
+          <nav className="flex items-center gap-1 p-1 bg-parchment-deep/70 border border-stone/30 rounded-sm">
+            <NavTab
+              active={view === "cascade"}
+              onClick={() => setView("cascade")}
+              label="Locate"
+              kh="ស្វែងរក"
+            />
+            <NavTab
+              active={view === "browse"}
+              onClick={() => setView("browse")}
+              label="Browse"
+              kh="មើលទាំងអស់"
+            />
+          </nav>
+
+          <div className="hidden sm:flex items-center gap-1">
+            <a
+              href="/api/"
+              className="group flex items-center gap-1.5 px-3 py-2 text-ink-soft hover:text-terracotta transition-colors"
+              title="Public JSON API"
+            >
+              <Code2 size={14} />
+              <span className="font-display text-sm tracking-wide">API</span>
+            </a>
+            <a
+              href="/cambodia_gazetteer.json"
+              download
+              className="group flex items-center gap-1.5 px-3 py-2 text-ink-soft hover:text-terracotta transition-colors"
+              title="Download the original JSON dataset (~1.2 MB)"
+            >
+              <Download size={14} />
+              <span className="font-display text-sm tracking-wide">
+                Download
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
     </header>
   );

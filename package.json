@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "cd web && npm ci && npm run build && rm -rf ../dist && cp -R dist ../dist"
+    "build": "cd web && npm ci && npm run build && rm -rf ../dist && cp -R dist ../dist && cd .. && node scripts/build-api.mjs ./dist"
   },
   "engines": {
     "node": ">=20"
