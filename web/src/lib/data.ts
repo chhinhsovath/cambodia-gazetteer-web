@@ -102,6 +102,95 @@ export function flatten(provinces: Province[]): FlatRow[] {
   return out;
 }
 
+export type DistrictKind = "krong" | "srok" | "khan";
+export type CommuneKind = "commune" | "sangkat";
+
+export function classifyDistrict(d: { khmer: string; latin: string }): DistrictKind {
+  if (d.khmer.startsWith("ខណ្ឌ") || / Khan$/.test(d.latin)) return "khan";
+  if (d.khmer.startsWith("ក្រុង") || / Municipality$/.test(d.latin))
+    return "krong";
+  return "srok";
+}
+
+export function classifyCommune(c: { khmer: string; latin: string }): CommuneKind {
+  if (c.khmer.startsWith("សង្កាត់") || / Sangkat$/.test(c.latin))
+    return "sangkat";
+  return "commune";
+}
+
+export interface PivotRow {
+  code: string;
+  khmer: string;
+  latin: string;
+  krong: number;
+  srok: number;
+  khan: number;
+  commune: number;
+  sangkat: number;
+  village: number;
+  districtTotal: number;
+  communeTotal: number;
+}
+
+export interface PivotTotals
+  extends Omit<PivotRow, "code" | "khmer" | "latin"> {}
+
+export function pivotByProvince(provinces: Province[]): {
+  rows: PivotRow[];
+  totals: PivotTotals;
+} {
+  const rows: PivotRow[] = provinces.map((p) => {
+    const r = {
+      code: p.code,
+      khmer: p.khmer,
+      latin: p.latin,
+      krong: 0,
+      srok: 0,
+      khan: 0,
+      commune: 0,
+      sangkat: 0,
+      village: 0,
+      districtTotal: 0,
+      communeTotal: 0,
+    };
+    for (const d of p.districts) {
+      r[classifyDistrict(d)]++;
+      for (const c of d.communes) {
+        r[classifyCommune(c)]++;
+        r.village += c.villages.length;
+      }
+    }
+    r.districtTotal = r.krong + r.srok + r.khan;
+    r.communeTotal = r.commune + r.sangkat;
+    return r;
+  });
+
+  const totals: PivotTotals = rows.reduce(
+    (t, r) => ({
+      krong: t.krong + r.krong,
+      srok: t.srok + r.srok,
+      khan: t.khan + r.khan,
+      commune: t.commune + r.commune,
+      sangkat: t.sangkat + r.sangkat,
+      village: t.village + r.village,
+      districtTotal: t.districtTotal + r.districtTotal,
+      communeTotal: t.communeTotal + r.communeTotal,
+    }),
+    {
+      krong: 0,
+      srok: 0,
+      khan: 0,
+      commune: 0,
+      sangkat: 0,
+      village: 0,
+      districtTotal: 0,
+      communeTotal: 0,
+    },
+  );
+
+  return { rows, totals };
+}
+
 export function countAll(provinces: Province[]): Counts {
   let d = 0,
     c = 0,

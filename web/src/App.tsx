@@ -4,8 +4,9 @@ import { Code2, Download } from "lucide-react";
 import { useGazetteer } from "./lib/data";
 import { CascadingView } from "./components/CascadingView";
 import { BrowseView } from "./components/BrowseView";
+import { PivotView } from "./components/PivotView";
 
-type View = "cascade" | "browse";
+type View = "cascade" | "browse" | "pivot";
 
 export default function App() {
   const { provinces, counts, flat, error } = useGazetteer();
@@ -34,8 +35,10 @@ export default function App() {
               >
                 {view === "cascade" ? (
                   <CascadingView provinces={provinces} />
-                ) : (
+                ) : view === "browse" ? (
                   <BrowseView rows={flat} counts={counts} />
+                ) : (
+                  <PivotView provinces={provinces} />
                 )}
               </motion.div>
             </AnimatePresence>
@@ -85,6 +88,12 @@ function Header({
               onClick={() => setView("browse")}
               label="Browse"
               kh="មើលទាំងអស់"
+            />
+            <NavTab
+              active={view === "pivot"}
+              onClick={() => setView("pivot")}
+              label="Survey"
+              kh="តារាង"
             />
           </nav>
 
