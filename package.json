@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "cd web && npm ci && npm run build && rm -rf ../dist && cp -R dist ../dist"
+    "build": "cd web && npm ci && npm run build && rm -rf ../dist && cp -R dist ../dist",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "engines": {
     "node": ">=20"
@@ -27,8 +29,8 @@
     "url": "https://github.com/RathanakSreang/cambodia-gazetteer/issues"
   },
   "homepage": "https://github.com/RathanakSreang/cambodia-gazetteer#readme",
-  "dependencies": {},
   "devDependencies": {
-    "jest": "^26.0.1"
+    "jest": "^26.0.1",
+    "wrangler": "^4.83.0"
   }
 }
