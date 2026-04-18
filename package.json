@@ -4,7 +4,11 @@
   "description": "Cambodia Provinces, Districts, Communes, Villages dataset.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "cd web && npm ci && npm run build && rm -rf ../dist && cp -R dist ../dist"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "repository": {
     "type": "git",
